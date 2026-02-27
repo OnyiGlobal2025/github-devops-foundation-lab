@@ -3,10 +3,10 @@ FROM node:18-alpine3.20 AS builder
 
 WORKDIR /app
 
-COPY package*.json ./
+COPY app/package*.json ./
 RUN npm ci
 
-COPY . .
+COPY app .
 
 # -------- Production Stage --------
 FROM node:18-alpine3.20
@@ -15,10 +15,10 @@ RUN apk update && apk upgrade
 
 WORKDIR /app
 
-COPY package*.json ./
+COPY app/package*.json ./
 RUN npm ci --omit=dev
 
-COPY --from=builder /app/server.js ./server.js
+COPY app/server.js ./server.js
 
 EXPOSE 3000
 
