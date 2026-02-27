@@ -3,6 +3,5 @@ node_modules
 .github
 __tests__
 *.log
-docs
 .eslintrc*
 jest.config*
