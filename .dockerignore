@@ -1,0 +1,8 @@
+node_modules
+.git
+.github
+__tests__
+*.log
+docs
+.eslintrc*
+jest.config*
