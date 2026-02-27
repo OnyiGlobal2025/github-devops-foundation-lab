@@ -29,3 +29,6 @@ jobs:
       - name: Run Tests
         working-directory: app
         run: npm test
+
+      - name: Build Docker image
+        run: docker build -t github-devops-foundation-lab .
