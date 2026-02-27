@@ -13,7 +13,7 @@ COPY app/package*.json ./
 RUN npm ci --omit=dev
 
 # Copy app source code
-COPY app/ .
+COPY . .
 
 # Expose port
 EXPOSE 3000
