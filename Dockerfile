@@ -1,22 +1,25 @@
-# Use official Node image
+# -------- Build Stage --------
+FROM node:18-alpine3.20 AS builder
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm ci
+
+COPY . .
+
+# -------- Production Stage --------
 FROM node:18-alpine3.20
 
 RUN apk update && apk upgrade
 
-# Set working directory
 WORKDIR /app
 
-# Copy package files first (for better caching)
-COPY app/package*.json ./
-
-# Install dependencies
+COPY package*.json ./
 RUN npm ci --omit=dev
 
-# Copy app source code
-COPY . .
+COPY --from=builder /app/server.js ./server.js
 
-# Expose port
 EXPOSE 3000
 
-# Start the app
 CMD ["node", "server.js"]
