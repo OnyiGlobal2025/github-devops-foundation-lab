@@ -1,6 +1,8 @@
 # Use official Node image
 FROM node:18-alpine3.20
 
+RUN apk update && apk upgrade
+
 # Set working directory
 WORKDIR /app
 
