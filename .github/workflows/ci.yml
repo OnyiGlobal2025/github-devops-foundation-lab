@@ -4,7 +4,8 @@ on:
   push:
     branches:
       - main
-      - feature/add-node-app
+    tags:
+      - "v*"
   pull_request:
     branches:
       - main
