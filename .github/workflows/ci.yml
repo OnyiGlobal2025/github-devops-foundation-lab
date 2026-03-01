@@ -1,13 +1,21 @@
 name: CI Pipeline
 
 on:
+  push:
+    branches:
+      - main
+      - feature/add-node-app
   pull_request:
     branches:
       - main
 
 jobs:
-  build-and-test:
+  build-test-scan-push:
     runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: write
 
     steps:
       - name: Checkout repository
@@ -16,7 +24,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
 
       - name: Install dependencies
         working-directory: app
@@ -39,5 +47,29 @@ jobs:
           image-ref: github-devops-foundation-lab
           format: table
           exit-code: 1
-          ignore-unfixed: true
           severity: CRITICAL
+
+      # Login only when pushing to main
+      - name: Log in to GitHub Container Registry
+        if: github.ref == 'refs/heads/main'
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Convert repo name to lowercase
+        if: github.ref == 'refs/heads/main'
+        id: repo
+        run: |
+          echo "repo=$(echo '${{ github.repository }}' | tr '[:upper:]' '[:lower:]')" >> $GITHUB_OUTPUT
+
+      - name: Tag Docker image
+        if: github.ref == 'refs/heads/main'
+        run: |
+          docker tag github-devops-foundation-lab ghcr.io/${{ steps.repo.outputs.repo }}:latest
+
+      - name: Push Docker image
+        if: github.ref == 'refs/heads/main'
+        run: |
+          docker push ghcr.io/${{ steps.repo.outputs.repo }}:latest
