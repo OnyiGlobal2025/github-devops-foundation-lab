@@ -41,3 +41,18 @@ jobs:
           exit-code: 1
           ignore-unfixed: true
           severity: CRITICAL
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Tag Docker image
+        run: |
+          docker tag github-devops-foundation-lab ghcr.io/${{ github.repository }}:latest
+
+      - name: Push Docker image
+        run: |
+          docker push ghcr.io/${{ github.repository }}:latest 
