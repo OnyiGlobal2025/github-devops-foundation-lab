@@ -1,6 +1,6 @@
 {
   "name": "github-devops-foundation-lab",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "description": "Express app with health endpoints for CI/CD testing",
   "main": "server.js",
   "scripts": {
