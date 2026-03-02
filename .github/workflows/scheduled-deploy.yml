@@ -33,7 +33,9 @@ jobs:
       - name: Run container
         run: |
           docker run -d -p 3000:3000 --name test-container ghcr.io/${{ steps.repo.outputs.repo }}:latest
-          sleep 25
+          sleep 15
+          docker ps -a
+          docker logs test-container || true
 
       - name: Health check
         run: |
