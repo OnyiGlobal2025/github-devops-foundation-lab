@@ -1,4 +1,4 @@
-name: Deployment Verification
+name: Scheduled Deployment Verification
 
 on:
   workflow_run:
