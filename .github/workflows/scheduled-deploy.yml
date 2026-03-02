@@ -1,12 +1,14 @@
-name: Scheduled Deployment Verification
+name: Deployment Verification
 
 on:
-  push:
-    tags:
-      - "v*"   # Only runs when you push a version tag like v1.0.0
+  workflow_run:
+    workflows: ["CI Pipeline"]   # MUST match your build workflow name exactly
+    types:
+      - completed
 
 jobs:
   verify-deployment:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
 
     permissions:
@@ -14,6 +16,11 @@ jobs:
       packages: read
 
     steps:
+      - name: Extract version tag
+        id: extract_tag
+        run: |
+          echo "IMAGE_TAG=${GITHUB_REF##*/}" >> $GITHUB_ENV
+
       - name: Log in to GHCR
         uses: docker/login-action@v3
         with:
@@ -21,17 +28,17 @@ jobs:
           username: onyiglobal2025
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Pull Docker image (version tag)
+      - name: Pull Docker image
         run: |
-          echo "Pulling image with tag: ${{ github.ref_name }}"
-          docker pull ghcr.io/onyiglobal2025/github-devops-foundation-lab:${{ github.ref_name }}
+          echo "Pulling image with tag: ${{ github.event.workflow_run.head_branch }}"
+          docker pull ghcr.io/onyiglobal2025/github-devops-foundation-lab:${{ github.event.workflow_run.head_branch }}
 
       - name: Run container
         run: |
           docker run -d \
             --name test-container \
             -p 3000:3000 \
-            ghcr.io/onyiglobal2025/github-devops-foundation-lab:${{ github.ref_name }}
+            ghcr.io/onyiglobal2025/github-devops-foundation-lab:${{ github.event.workflow_run.head_branch }}
 
           sleep 15
           docker ps
