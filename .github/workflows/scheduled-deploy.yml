@@ -1,8 +1,9 @@
 name: Scheduled Deployment Verification
 
 on:
-  schedule:
-    - cron: "0 6 * * *"   # Runs every day at 06:00 UTC
+  push:
+    tags:
+      - "v*"  # Trigger on version tags like v1.0.0
   workflow_dispatch:       # Allows manual trigger
 
 jobs:
@@ -28,11 +29,11 @@ jobs:
 
       - name: Pull latest Docker image
         run: |
-          docker pull ghcr.io/${{ steps.repo.outputs.repo }}:latest
+          docker pull ghcr.io/onyiglobal2025/github-devops-foundation-lab:${{ github.ref_name }}
 
       - name: Run container
         run: |
-          docker run -d -p 3000:3000 --name test-container ghcr.io/${{ steps.repo.outputs.repo }}:latest
+          docker run -d --name test-container -p 3000:3000 ghcr.io/onyiglobal2025/github-devops-foundation-lab:${{ github.ref_name }}
           sleep 15
           docker ps -a
           docker logs test-container || true
