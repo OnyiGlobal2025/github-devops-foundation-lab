@@ -78,6 +78,8 @@ Pipeline includes:
 
 - Install dependencies
 
+- Run ESlint
+
 - Run tests
 
 - Build Docker image
