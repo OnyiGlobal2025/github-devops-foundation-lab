@@ -128,6 +128,21 @@ A scheduled GitHub Actions workflow:
 This simulates production deployment validation.
 
 
+##  Project Evidence
+
+### Branch Protection Enforced
+![Branch Protection](docs/screenshots/branch-protection.png)
+
+### CI Pipeline Passing
+![CI Pipeline](docs/screenshots/ci-success.png)
+
+### Versioned Images in GHCR
+![GHCR Tags](docs/screenshots/ghcr-tags.png)
+
+### Scheduled Deployment Verification Success
+![Deployment Verification](docs/screenshots/deploy-success.png)
+
+
 ## Real Debugging Experience
 
 During development, the following real-world issues were resolved:
