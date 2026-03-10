@@ -47,11 +47,11 @@ Container Health Check
 
 Main branch is protected with:
 
-✅ Pull Request required before merge
+- ✅ Pull Request required before merge
 
-✅ CI checks must pass before merge
+- ✅ CI checks must pass before merge
 
-❌ Direct pushes blocked
+- ❌ Direct pushes blocked
 
 
 ## Why This Matters
@@ -86,12 +86,9 @@ Pipeline includes:
 
 - Tag images as:
 
-    -  ```bash
-latest
-```
-    -     ```bash
-${{ github.ref_name }} (e.g., v1.0.7)
-```
+    -  latest
+ 
+    -  ${{ github.ref_name }} (e.g., v1.0.7)
 
 
 
